@@ -1,6 +1,7 @@
 package com.springprojects.springredditclone.service;
 
 import com.springprojects.springredditclone.dto.RegisterRequest;
+import com.springprojects.springredditclone.model.NotificationEmail;
 import com.springprojects.springredditclone.model.User;
 import com.springprojects.springredditclone.model.VerificationToken;
 import com.springprojects.springredditclone.repository.UserRepository;
@@ -16,13 +17,14 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class AuthService {
-    //its better to use constructor injection than field injection
+    //it's better to use constructor injection than field injection
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
     private final VerificationTokenRepository verificationTokenRepository;
 
+    private final MailService mailService;
     @Transactional
     public void signup(RegisterRequest registerRequest)
     {
@@ -37,6 +39,10 @@ public class AuthService {
 
         String token=generateVerificationToken(user);
 
+        mailService.sendMail(new NotificationEmail("Please Activate your Account",
+                user.getEmail(), "Thank you for signing up to your Spring Reddit, "+
+                "please click on the below url to activate your account:"+
+                "http://localhost:8080/api/auth/accountVerification/"+token));
     }
 
     private String generateVerificationToken(User user) {
