@@ -23,6 +23,6 @@ public class AutoController {
  public ResponseEntity<String> verifyAccount(@PathVariable String token)
     {
      authService.verifyAccount(token);
-     return new ResponseEntity<>("Account Actiivated Successfully", HttpStatus.OK);
+     return new ResponseEntity<>("Account Activated Successfully", HttpStatus.OK);
     }
 }
